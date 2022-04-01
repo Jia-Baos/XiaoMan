@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from Myutils import W1, W2, W3, W1_bias, W2_bias, W3_bias
+from Myutils import W1, W2, W3
 
 
 # define the struct of net
