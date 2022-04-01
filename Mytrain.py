@@ -19,7 +19,7 @@ loss = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=1.0)
 
 if __name__ == '__main__':
-    for epoch in range(1000):
+    for epoch in range(100):
         y = model(x)
         current_loss = loss(y, label)
         print("predict value")
@@ -34,6 +34,11 @@ if __name__ == '__main__':
         print(model.c3.weight)
         print(model.c2.weight)
         print(model.c1.weight)
+
+        print("{}grad of weight and bias".format(epoch))
+        print(model.c3.weight.grad)
+        print(model.c2.weight.grad)
+        print(model.c1.weight.grad)
 
         optimizer.step()
 

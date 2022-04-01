@@ -8,6 +8,8 @@ y = x * 2
 #     y = y * 2
 print(y)
 
+# 经过查找资料，pytorch中不能实现矩阵对矩阵的求导
+# 只能够进行标量对矩阵（向量）的求导，因此其需要通过成一个矩阵形成标量，再通过标量对矩阵求导
 y.backward(torch.ones_like(y))
 print(x.grad)
 
