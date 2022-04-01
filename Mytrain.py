@@ -19,7 +19,9 @@ loss = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=1.0)
 
 if __name__ == '__main__':
-    for epoch in range(100):
+    model.train()
+    for epoch in range(500):
+        best_loss = 1
         y = model(x)
         current_loss = loss(y, label)
         print("predict value")
@@ -46,3 +48,6 @@ if __name__ == '__main__':
         print(model.c3.weight)
         print(model.c2.weight)
         print(model.c1.weight)
+
+        if current_loss < best_loss:
+            torch.save(model.state_dict(), 'best_model.pt')
