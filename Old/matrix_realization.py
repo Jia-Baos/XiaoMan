@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+loss = nn.CrossEntropyLoss()
+
 X = torch.tensor([
     [1, 1, 0, 0],
     [0, 0, 1, 1],
@@ -32,8 +34,14 @@ y = torch.tensor([
     [1.0, 0.0]
 ], dtype=torch.float)
 
+W1_copy = torch.ones_like(W1)
+W2_copy = torch.ones_like(W2)
+W3_copy = torch.ones_like(W3)
+curr_loss = 1
+
 for epoch in range(500):
     print("the epoch: {}".format(epoch))
+
     # forward: step1
     sigmoid = nn.Sigmoid()
     S1 = torch.mm(X, W1)
@@ -53,6 +61,12 @@ for epoch in range(500):
     y_hat = softmax(O3)
     # print(O3)
     print(y_hat)
+    print(loss(y_hat, y))
+    if loss(y_hat, y) < curr_loss:
+        curr_loss = loss(y_hat, y)
+        W1_copy = W1.clone()
+        W2_copy = W2.clone()
+        W3_copy = W3.clone()
 
     # backward: step1
     # Z2 @ W3 = O, softmax(O) = y_hat
@@ -76,6 +90,38 @@ for epoch in range(500):
     g1 = torch.mm(X.transpose(0, 1), g1_3)
     # print(g1)
 
-    W1 = W1 - g1
-    W2 = W2 - g2
-    W3 = W3 - g3
+    W1 = W1 - torch.mul(g1, 0.1)
+    W2 = W2 - torch.mul(g2, 0.1)
+    W3 = W3 - torch.mul(g3, 0.1)
+
+# 训练后得到的权重
+print(W1_copy)
+print(W2_copy)
+print(W3_copy)
+
+# 利用前面求得的权重进行推理
+X_test = torch.tensor([
+    [0, 0, 1, 1],
+    [1, 1, 0, 0],
+    [1, 0, 0, 1]
+], dtype=torch.float)
+
+# forward: step1
+sigmoid = nn.Sigmoid()
+S1 = torch.mm(X_test, W1_copy)
+Z1 = sigmoid(S1)
+# print(S1)
+# print(Z1)
+
+# forward: step2
+S2 = torch.mm(Z1, W2_copy)
+Z2 = sigmoid(S2)
+# print(S2)
+# print(Z2)
+
+# forward: step3
+softmax = nn.Softmax(dim=1)
+O3 = torch.mm(Z2, W3_copy)
+y_hat = softmax(O3)
+# print(O3)
+print(y_hat)
