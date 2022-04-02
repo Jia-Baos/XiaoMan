@@ -1,3 +1,5 @@
+import os.path
+
 import torch
 import torch.nn as nn
 
@@ -50,3 +52,11 @@ print(result1)
 result2 = x + y
 result2.backward(z)
 print(x.grad)
+
+img_list_txt = "D:\\PythonProject\\XiaoMan\\data\\ImageSets\\train.txt"
+with open(img_list_txt, 'r') as f:
+    for line in f.readlines():
+        print(line.strip('\n'))
+img_name = "maejdjksf.txt"
+filename = os.path.split(img_name)[1]
+print(filename)
