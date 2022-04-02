@@ -52,10 +52,12 @@ def change_label(labels_xml_dir, labels_txt_dir):
         xml_root = xml_tree.getroot()
         # 获取图像的尺寸
         size = xml_root.find('size')
+
+        f = open(os.path.join(labels_txt_dir, xml_id + '.txt'), 'w', encoding='utf-8')
         if size != None:
             width = int(size.find('width').text)
             height = int(size.find('height').text)
-            # 获取Ground Truth的cls，x1,x2,y1,y2
+            # 获取Ground Truth的cls,x1,x2,y1,y2
             for obj in xml_root.iter('object'):
                 difficult = obj.find('difficult').text
                 cls = obj.find('name').text
@@ -72,7 +74,6 @@ def change_label(labels_xml_dir, labels_txt_dir):
                     float(obj_box.find('ymax').text)
                 )
                 print(xml_id, cls, points)
-                f = open(os.path.join(labels_txt_dir, xml_id + '.txt'), 'a+', encoding='utf-8')
                 f.write(str(cls_id) + " " + " ".join([str(item) for item in points]) + '\n')
         f.close()
     print("change_label has done!!!")

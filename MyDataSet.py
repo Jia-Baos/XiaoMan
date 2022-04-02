@@ -26,7 +26,6 @@ class MyDataSet(Dataset):
     --------000001.txt
                 ~
     """
-
     def __init__(self, dataset_dir, mode="train", trans=None):
         self.data_dir = dataset_dir
         self.image_dir = os.path.join(dataset_dir, "Images")
