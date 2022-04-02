@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+<annotation>
+<folder>images</folder>
+<filename>000050.jpg</filename>
+<path>D:\PyCharm\yolov5-mask\data\images\000050.jpg</path>
+<source>
+    <database>Unknown</database>
+</source>
+<size>
+    <width>416</width>
+    <height>415</height>
+    <depth>3</depth>
+</size>
+
+<segmented>0</segmented>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>37</xmin>
+        <ymin>185</ymin>
+        <xmax>78</xmax>
+        <ymax>242</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>100</xmin>
+        <ymin>219</ymin>
+        <xmax>140</xmax>
+        <ymax>269</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>182</xmin>
+        <ymin>181</ymin>
+        <xmax>240</xmax>
+        <ymax>229</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>249</xmin>
+        <ymin>211</ymin>
+        <xmax>304</xmax>
+        <ymax>267</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>336</xmin>
+        <ymin>138</ymin>
+        <xmax>384</xmax>
+        <ymax>174</ymax>
+    </bndbox>
+</object>
+</annotation>

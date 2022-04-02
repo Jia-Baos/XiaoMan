@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<annotation>
+<folder>images</folder>
+<filename>000063.jpg</filename>
+<path>D:\PyCharm\yolov5-mask\data\images\000063.jpg</path>
+<source>
+    <database>Unknown</database>
+</source>
+<size>
+    <width>415</width>
+    <height>416</height>
+    <depth>3</depth>
+</size>
+
+<segmented>0</segmented>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>190</xmin>
+        <ymin>92</ymin>
+        <xmax>244</xmax>
+        <ymax>140</ymax>
+    </bndbox>
+</object>
+</annotation>

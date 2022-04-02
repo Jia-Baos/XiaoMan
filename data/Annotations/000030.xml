@@ -1,0 +1,124 @@
+<?xml version="1.0" ?>
+<annotation>
+<folder>images</folder>
+<filename>000030.jpg</filename>
+<path>D:\PyCharm\yolov5-mask\data\images\000030.jpg</path>
+<source>
+    <database>Unknown</database>
+</source>
+<size>
+    <width>416</width>
+    <height>415</height>
+    <depth>3</depth>
+</size>
+
+<segmented>0</segmented>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>372</xmin>
+        <ymin>159</ymin>
+        <xmax>412</xmax>
+        <ymax>203</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>300</xmin>
+        <ymin>183</ymin>
+        <xmax>360</xmax>
+        <ymax>221</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>148</xmin>
+        <ymin>193</ymin>
+        <xmax>206</xmax>
+        <ymax>237</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>18</xmin>
+        <ymin>200</ymin>
+        <xmax>68</xmax>
+        <ymax>243</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>92</xmin>
+        <ymin>181</ymin>
+        <xmax>136</xmax>
+        <ymax>223</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>257</xmin>
+        <ymin>163</ymin>
+        <xmax>289</xmax>
+        <ymax>194</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>no-mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>63</xmin>
+        <ymin>107</ymin>
+        <xmax>110</xmax>
+        <ymax>147</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>no-mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>194</xmin>
+        <ymin>112</ymin>
+        <xmax>236</xmax>
+        <ymax>151</ymax>
+    </bndbox>
+</object>
+    <object>
+    <name>mask</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+        <xmin>99</xmin>
+        <ymin>81</ymin>
+        <xmax>134</xmax>
+        <ymax>106</ymax>
+    </bndbox>
+</object>
+</annotation>
