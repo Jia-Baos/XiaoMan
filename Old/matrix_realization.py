@@ -39,7 +39,7 @@ W2_copy = torch.ones_like(W2)
 W3_copy = torch.ones_like(W3)
 curr_loss = 1
 
-for epoch in range(1):
+for epoch in range(100):
     print("the epoch: {}".format(epoch))
 
     # forward: step1
