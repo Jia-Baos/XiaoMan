@@ -39,7 +39,7 @@ W2_copy = torch.ones_like(W2)
 W3_copy = torch.ones_like(W3)
 curr_loss = 1
 
-for epoch in range(500):
+for epoch in range(1):
     print("the epoch: {}".format(epoch))
 
     # forward: step1
@@ -71,24 +71,24 @@ for epoch in range(500):
     # backward: step1
     # Z2 @ W3 = O, softmax(O) = y_hat
     g3 = torch.mm(Z2.transpose(0, 1), y_hat - y)
-    # print(g3)
+    print(g3)
 
-    # backward: step1
+    # backward: step2
     # Z1 @ W2 = S2, sigmoid(S2) = Z2
     sigmoid = nn.Sigmoid()
     g2_1 = torch.mm(y_hat - y, W3.transpose(0, 1))
     g2_2 = torch.mul(sigmoid(S2), torch.ones_like(S2) - sigmoid(S2))
     g2_3 = torch.mul(g2_1, g2_2)
     g2 = torch.mm(Z1.transpose(0, 1), g2_3)
-    # print(g2)
+    print(g2)
 
-    # backward: step1
+    # backward: step3
     # X1 @ W1 = S1, sigmoid(S1) = Z1
     g1_1 = torch.mm(g2_3, W2.transpose(0, 1))
     g1_2 = torch.mul(sigmoid(S1), torch.ones_like(S1) - sigmoid(S1))
     g1_3 = torch.mul(g1_1, g2_2)
     g1 = torch.mm(X.transpose(0, 1), g1_3)
-    # print(g1)
+    print(g1)
 
     W1 = W1 - torch.mul(g1, 0.1)
     W2 = W2 - torch.mul(g2, 0.1)
