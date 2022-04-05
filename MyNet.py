@@ -37,11 +37,11 @@ class XiaoManNet(nn.Module):
         Z2 = self.s2(S2)
         S3 = self.c3(Z2)
         Z3 = self.s3(S3)
-
         return Z3
 
 
 if __name__ == "__main__":
+    # test XiaoManNet
     x = torch.tensor([
         [1, 1, 0, 0],
         [0, 0, 1, 1],
