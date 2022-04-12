@@ -4,6 +4,9 @@ from torch.nn import functional as F
 
 
 class RestNetBasicBlock(nn.Module):
+    """
+    This block indicates the full line part in the ResNet
+    """
     def __init__(self, in_channels, out_channels, stride):
         super(RestNetBasicBlock, self).__init__()
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1)
@@ -20,6 +23,9 @@ class RestNetBasicBlock(nn.Module):
 
 
 class RestNetDownBlock(nn.Module):
+    """
+    This block indicates the dotted line part in the ResNet
+    """
     def __init__(self, in_channels, out_channels, stride):
         super(RestNetDownBlock, self).__init__()
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride[0], padding=1)
@@ -44,6 +50,18 @@ class RestNetDownBlock(nn.Module):
 
 
 class RestNet18(nn.Module):
+    """
+    The three layers are 1x1, 3x3 and 1x1 convolution, where the 1x1 layers are responsible for reducing and the increase(restoring) dinmensions(channels), leaving the 3x3 layer a bottleneck with smaller input/output dimensions.
+
+    The layer 1x1 with stride 2 just like the dowmsample, which is easy to reduce the dimensions(channels) and computational complexity.
+    
+    A simple example to explain the mechanism of 1x1:
+        1: 256 -> 3x3x256 -> 256
+        parameters: 256x3x3x256 = 589824
+        2: 256 -> 1x1x64 -> 3x3x64 -> 1x1x256 -> 256
+        parameters: 256x1x1x64 + 64x3x3x64 + 64x1x1x256 = 69632
+    The total number of parameters has reduced drastically.
+    """
     def __init__(self):
         super(RestNet18, self).__init__()
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3)

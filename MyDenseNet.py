@@ -25,6 +25,9 @@ class Bottleneck(nn.Module):
 
 
 class Transition(nn.Module):
+    """
+    The transition is responsible for connection of two blocks
+    """
     def __init__(self, in_planes, out_planes):
         super(Transition, self).__init__()
         self.bn = nn.BatchNorm2d(in_planes)
@@ -37,6 +40,17 @@ class Transition(nn.Module):
 
 
 class DenseNet(nn.Module):
+    """
+    block: which is equivalent to the Bottleneck
+    num_block: which is responsible for the number of Bottleneck in Denseblock
+    growth_rate: which is responsible for the increasement of channels
+        Bottleneck: in_planes -> in_planes + growth_rate
+        Denseblock: num_planes -> (num_planes + Denseblock's chennels * growth_rate) * reduction
+    reduction: the ratio of downsample
+    num_classes: the number of classes in result
+    fn_size: the size of every channel before enter the fully connected layer
+    pool_size: 
+    """
     def __init__(self, block, num_block, growth_rate=12, reduction=0.5, num_classes=10, fn_size=1, pool_size=7):
         super(DenseNet, self).__init__()
         self.growth_rate = growth_rate
@@ -49,9 +63,11 @@ class DenseNet(nn.Module):
         self.pool1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         # channels = 24
+        # the num_planes is equivalent to in_planes of Bottleneck
         self.dense1 = self._make_dense_layers(block, num_planes, num_block[0])
         num_planes += num_block[0] * growth_rate
         # channels = 24 + 6 * 12 = 96
+        # the reduction is equivalent the stride of avg_pool2d in Transition block 
         out_planes = int(math.floor(num_planes * reduction))
         self.trans1 = Transition(num_planes, out_planes)
         num_planes = out_planes
@@ -90,33 +106,37 @@ class DenseNet(nn.Module):
                 m.bias.data.zero_()
 
     def _make_dense_layers(self, block, in_planes, num_block):
+        """
+        in fact, the block in this func is the Bottleneck 
+        """
         layers = []
         for i in range(num_block):
             layers.append(block(in_planes, self.growth_rate))
+            # the result'channels of Bottleneck's forward is in_planes +grow_rate
             in_planes += self.growth_rate
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        print(1, x.size())
+        print("input", x.size())
         x = self.conv1(x)
-        print(2, x.size())
+        print("pre_conv: 7x7 S2", x.size())
         x = self.pool1(x)
-        print(3, x.size())
+        print("pre_pool: 3x3 S2", x.size())
         x = self.trans1(self.dense1(x))
-        print(4, x.size())
+        print("first_Denseblock: ", x.size())
         x = self.trans2(self.dense2(x))
-        print(5, x.size())
+        print("second_Denseblock: ", x.size())
         x = self.trans3(self.dense3(x))
-        print(6, x.size())
+        print("third_Denseblock: ", x.size())
         x = self.dense4(x)
-        print(7, x.size())
+        print("fourth_Denseblock without transition:", x.size())
         x = func.avg_pool2d(func.relu(self.bn(x)), self.pool_size)
-        print(8, x.size())
+        print("global average pool: 7x7 ", x.size())
         x = x.view(x.size(0), -1)
-        print(9, x.size())
+        print("flatten the result of GAP: ", x.size())
         x = self.linear(x)
-        x = nn.Softmax(1)(x)
-        print(10, x.size())
+        x = nn.Softmax(dim=1)(x)
+        print("Softmax the output of linear layer: ", x.size())
 
         return x
 
@@ -147,7 +167,7 @@ if __name__ == "__main__":
     # size, fn_size, pool_size = 256, 1, 8
     size, fn_size, pool_size = 256, 4, 4
     test_input = torch.rand(1, 3, size, size)
-    model = DenseNet121(fn_size, pool_size, 4)
+    model = DenseNet121(fn_size, pool_size, 10)
     # print(model)
     # summary(model, (3, size, size))
     output = model(test_input)
