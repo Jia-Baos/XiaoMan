@@ -78,7 +78,8 @@ class AlexNet(nn.Module):
         x = self.pool(self.act(self.C5(x)))
         print("fifth conc, act, pool", x.size())
 
-        x = x.view(-1, 256 * 6 * 6)
+        # x = x.view(-1, 256 * 6 * 6)
+        x = torch.flatten(x, 1)
         print("ready to fcn: ", x.size())
 
         x = self.dropout(self.act(self.F1(x)))
@@ -93,7 +94,7 @@ class AlexNet(nn.Module):
 
 
 if __name__ == '__main__':
-    x = torch.rand((3, 227, 227), dtype=torch.float)
+    x = torch.rand((4, 3, 227, 227), dtype=torch.float)
     print("input's size: ", x.size())
     model = AlexNet()
     y = model(x)

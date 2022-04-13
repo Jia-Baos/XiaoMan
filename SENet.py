@@ -30,7 +30,7 @@ class SELayer(nn.Module):
 
 
 if __name__ == '__main__':
-    x = torch.rand((1, 3, 4, 4), dtype=torch.float)
+    x = torch.rand((4, 3, 4, 4), dtype=torch.float)
     print(x.size())
     print("input: ", x)
     model = SELayer()
