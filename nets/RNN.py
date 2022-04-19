@@ -3,40 +3,43 @@ import torch.nn as nn
 
 
 class MyRNN(nn.Module):
-    def __init__(self, in_features=6, hidden_size=2, n_classes=2):
+    def __init__(self, in_features=6, hidden_size=4, out_features=2):
         super(MyRNN, self).__init__()
         self.in_features = in_features
         self.hidden_size = hidden_size
-        self.n_classes = n_classes
+        self.out_features = out_features
         self.linear1 = nn.Linear(self.in_features + self.hidden_size, self.hidden_size)
-        self.linear2 = nn.Linear(self.hidden_size, self.n_classes)
+        self.linear2 = nn.Linear(self.hidden_size, self.out_features)
         self.tanh = nn.Tanh()
         self.sigmoid = nn.Sigmoid()
-        self.softmax = nn.Softmax(dim=2)
 
     def forward(self, x):
-        # x -> [batch, seq_len, in_features]
-        pre_hidden_state = torch.zeros((x.shape[0], x.shape[1], self.hidden_size), dtype=torch.float)
 
-        for i in range(x.shape[1]):
-            output = torch.cat((pre_hidden_state, x), dim=2)
-            print("cat's size: ", output.size())
-            hidden_state = self.linear1(output)
-            hidden_state = self.tanh(hidden_state)
-            print("hidden_state's size: ", hidden_state.size())
+        # x: [batch, seq_len, in_features] -> [seq_len, batch, in_features]
+        input = x.permute(1, 0, 2)
+        # 初始化hidden_state
+        pre_hidden_state = torch.zeros((1, input.shape[1], self.hidden_size), dtype=torch.float)
+        # 初始化RNN输出序列
+        output = torch.zeros((input.shape[0], input.shape[1], self.out_features), dtype=torch.float)
+
+        for i in range(input.shape[0]):
+            print("num of seq_len: ", i)
+            print("input_pre's size: ", torch.unsqueeze(input[i, :, :], dim=0).size())
+            print("pre_hidden_state's size: ", pre_hidden_state.size())
+            input_hidden_cat = torch.cat((pre_hidden_state, torch.unsqueeze(input[i, :, :], dim=0)), dim=2)
+            print("input_hidden_cat's size: ", input_hidden_cat.size())
+            curr_hidden_state = self.linear1(input_hidden_cat)
+            curr_hidden_state = self.tanh(curr_hidden_state)
+            print("hidden_state's size: ", curr_hidden_state.size())
 
             # 修正下一轮所使用的hidden_state
-            pre_hidden_state = hidden_state
+            pre_hidden_state = curr_hidden_state
+            output_temp = self.linear2(curr_hidden_state)
+            print("output_temp's size: ", output_temp.size())
+            output[i, :, :] = output_temp
 
-            output = self.linear2(hidden_state)
-            if self.n_classes == 1:
-                output = self.sigmoid(output)
-                print("final output's size: ", output.size())
-            else:
-                output = self.softmax(output)
-                print("final output's size: ", output.size())
-
-        return output, hidden_state
+        output = output.permute(1, 0, 2)
+        return output, curr_hidden_state
 
 
 if __name__ == '__main__':
@@ -48,13 +51,13 @@ if __name__ == '__main__':
     哈哈哈哈哈，很有意思的一件事哈
     """
 
-    x = torch.rand((4, 6, 8), dtype=torch.float)
+    # x: [batch, seq_len, in_features]
+    x = torch.rand((4, 10, 6), dtype=torch.float)
     print("input's size: ", x.size())
-    model = MyRNN(in_features=x.shape[2], hidden_size=2, n_classes=2)
+    print("*********************************************")
+    model = MyRNN(in_features=x.shape[2], hidden_size=4, out_features=2)
     output, hidden_state = model(x)
     print(output)
     print(type(output))
     print(hidden_state)
     print(type(hidden_state))
-
-

@@ -15,12 +15,12 @@ class MyLSTM(nn.Module):
         self.cell_state_size = cell_state_size
         self.out_features = out_features
 
-        self.forget_gate = nn.Linear(self.in_features+self.cell_state_size, self.cell_state_size)
+        self.forget_gate = nn.Linear(self.in_features + self.cell_state_size, self.cell_state_size)
 
-        self.input_gate1 = nn.Linear(self.in_features+self.cell_state_size, self.cell_state_size)
-        self.input_gate2 = nn.Linear(self.in_features+self.cell_state_size, self.cell_state_size)
+        self.input_gate1 = nn.Linear(self.in_features + self.cell_state_size, self.cell_state_size)
+        self.input_gate2 = nn.Linear(self.in_features + self.cell_state_size, self.cell_state_size)
 
-        self.output_gate = nn.Linear(self.in_features+self.cell_state_size, self.cell_state_size)
+        self.output_gate = nn.Linear(self.in_features + self.cell_state_size, self.cell_state_size)
 
         self.linear_cls = nn.Linear(self.cell_state_size, out_features)
 
@@ -29,13 +29,16 @@ class MyLSTM(nn.Module):
         self.softmax = nn.Softmax(dim=2)
 
     def forward(self, x):
-        # x -> [batch, seq_len, in_features]
-        cell_state = torch.zeros((x.shape[0], x.shape[1], self.cell_state_size), dtype=torch.float)
+        # x: [batch, seq_len, in_features] -> [seq_len, batch, in_features]
+        x = x.permute(1, 0, 2)
+        cell_state = torch.zeros((1, x.shape[1], self.cell_state_size), dtype=torch.float)
+        output_sequence = torch.zeros((x.shape[0], x.shape[1], self.out_features), dtype=torch.float)
 
-        for i in range(x.shape[1]):
+        for i in range(x.shape[0]):
+            print("*********************************************************")
 
             # 各门的输入
-            input = torch.cat((cell_state, x), dim=2)
+            input = torch.cat((cell_state, torch.unsqueeze(x[i, :, :], dim=0)), dim=2)
             print("original cell_state: ", cell_state.size())
 
             # 遗忘门
@@ -66,14 +69,11 @@ class MyLSTM(nn.Module):
 
             # 输出门在经过一个全连接层得到当前帧的预测
             output = self.linear_cls(output_gate_output)
-            if self.out_features == 1:
-                output = self.sigmoid(output)
-                print("final output's size: ", output.size())
-            else:
-                output = self.softmax(output)
-                print("final output's size: ", output.size())
+            print("output's size: ", output.size())
+            output_sequence[i, :, :] = output
 
-        return output, cell_state
+        output_sequence = output_sequence.permute(1, 0, 2)
+        return output_sequence, cell_state
 
 
 if __name__ == '__main__':
@@ -85,13 +85,12 @@ if __name__ == '__main__':
     哈哈哈哈哈，很有意思的一件事哈
     """
 
-    x = torch.rand((4, 1, 4), dtype=torch.float)
+    # x: [batch, seq_len, in_features]
+    x = torch.rand((4, 10, 6), dtype=torch.float)
     print("input's size: ", x.size())
-    model = MyLSTM(in_features=x.shape[2], cell_state_size=2, out_features=1)
+    model = MyLSTM(in_features=x.shape[2], cell_state_size=4, out_features=2)
     output, cell_state = model(x)
     print(output)
     print(type(output))
     print(cell_state)
     print(type(cell_state))
-
-
